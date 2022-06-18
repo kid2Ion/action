@@ -7,6 +7,7 @@
 
 今回はusecase,handlerにinterface抽象化をしない
 →handlerが2階層下のdomainに依存したりします
+→DIもしない
 
 
 ### handler
