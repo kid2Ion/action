@@ -1,5 +1,19 @@
 package rest
 
-// HTTPリクエストを受け取り、UseCase を使って処理を行い、結果を返す
-// 外部にあるものがなんであれ、その差異を吸収して、ユースケースに伝えるのが役目
-// HTTP通信以外でも対応できるように、本プロジェクトでは /handler/rest というふうにディレクトリを切っている
+import (
+	"net/http"
+
+	"github.com/labstack/echo/v4"
+)
+
+func Index(c echo.Context) error {
+	return c.String(http.StatusOK, "hello world")
+}
+
+func Action(c echo.Context) error {
+	return c.String(http.StatusOK, "return action")
+}
+
+func Users(c echo.Context) error {
+	return c.String(http.StatusOK, "create user")
+}
