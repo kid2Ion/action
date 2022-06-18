@@ -13,14 +13,13 @@
 
 ### usecase
 - システムのユースケースを満たす処理の流れを実装
-    - model
+### domain
+- model
       model定義
     - reoisitory
         UserRepository : User における Repository のインターフェース
         -> 依存性逆転の法則により infra 層は domain 層（本インターフェース）に依存
         呼び出すdomainロジック(interfaceを実装)
-### domain
-
 
 ### infra
 - domainロジックの技術的関心を記載
