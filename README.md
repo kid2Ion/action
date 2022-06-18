@@ -13,18 +13,18 @@
 
 ```
 - handler
-  ∟rest
-    ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ)
+    ∟rest
+      ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ)
 - usecase
-  ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ) ここでdb接続&閉じる
+    ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ) ここでdb接続&閉じる
 - domain
-  ∟model
-    ∟[各種domain].go
-  ∟repository 
-    ∟[各種domain]_repository.go → CRUD一つのinterfaceにまとめる([各種domain]Repository interface)
+    ∟model
+      ∟[各種domain].go
+    ∟repository 
+      ∟[各種domain]_repository.go → CRUD一つのinterfaceにまとめる([各種domain]Repository interface)
 - infra
-  ∟persistence
-    ∟[各種domain].go → 全てのCRUD関数記載
+    ∟persistence
+      ∟[各種domain].go → 全てのCRUD関数記載
 ```
 
 ### handler
