@@ -1,3 +1,28 @@
-action
+### 処理利流れ
+1. cmd/api/main.go
+2. handler
+3. usecase
+4. domain
+5. infra
 
-hi there
+
+### handler
+- HTTPリクエストを受け取り、UseCase を使って処理を行い、結果を返す
+- 外部にあるものがなんであれ、その差異を吸収して、ユースケースに伝えるのが役目
+- HTTP通信以外でも対応できるように、本プロジェクトでは /handler/rest というふうにディレクトリを切っている(restAPIを明示)
+
+### usecase
+- システムのユースケースを満たす処理の流れを実装
+    - model
+      model定義
+    - reoisitory
+        UserRepository : User における Repository のインターフェース
+        -> 依存性逆転の法則により infra 層は domain 層（本インターフェース）に依存
+        呼び出すdomainロジック(interfaceを実装)
+### domain
+
+
+### infra
+- domainロジックの技術的関心を記載
+- package名をrepository という名前にしたいが domain 配下の repository とパッケージ名が被ってしまうため persistence で代替
+
