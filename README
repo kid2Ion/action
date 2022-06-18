@@ -5,6 +5,9 @@
 4. domain
 5. infra
 
+今回はusecase,handlerにinterface抽象化をしない
+→handlerが2階層下のdomainに依存したりします
+
 
 ### handler
 - HTTPリクエストを受け取り、UseCase を使って処理を行い、結果を返す
