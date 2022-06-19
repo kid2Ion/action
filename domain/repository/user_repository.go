@@ -2,9 +2,11 @@ package repository
 
 import (
 	"action/domain/model"
+
+	"github.com/jinzhu/gorm"
 )
 
 type UserRepository interface {
-	GetAllUsersByRoomId(roomId string) ([]*model.User, error)
-	Insert(name string, gender int) error
+	GetAllUsersByRoomId(conn *gorm.DB, roomId string) ([]*model.User, error)
+	Insert(conn *gorm.DB, name string, gender int) error
 }
