@@ -24,9 +24,9 @@ func main() {
 	// 依存関係の注入(全層のインスタンス化を行う)
 	userPersistence := persistence.NewUserPersistence(conn)
 	userUseCase := usecase.NewUserUseCase(userPersistence)
-	UserHandler := handler.NewUserHandler(userUseCase)
+	userHandler := handler.NewUserHandler(userUseCase)
 
-	e.GET("/action", UserHandler.Action)
-	e.POST("/users", UserHandler.UserCreate)
+	e.GET("/action", userHandler.Action)
+	e.POST("/users", userHandler.UserCreate)
 	e.Logger.Fatal(e.Start(":8080"))
 }
