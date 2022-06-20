@@ -7,18 +7,22 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type userPersistence struct{}
-
-func NewUserPersistence() repository.UserRepository {
-	return &userPersistence{}
+type userPersistence struct {
+	conn *gorm.DB
 }
 
-func (up userPersistence) Insert(conn *gorm.DB, name string, gender int) error {
+func NewUserPersistence(conn *gorm.DB) repository.UserRepository {
+	return &userPersistence{
+		conn: conn,
+	}
+}
+
+func (up userPersistence) Insert(name string, gender int) error {
 	// 中身はまだ
 	return nil
 }
 
-func (up userPersistence) GetAllUsersByRoomId(conn *gorm.DB, roomId string) ([]*model.User, error) {
+func (up userPersistence) GetAllUsersByRoomId(roomId string) ([]*model.User, error) {
 	// 中身まだ
 	return nil, nil
 }
