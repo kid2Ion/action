@@ -6,10 +6,6 @@
 4. domain
 5. infra
 
-今回はusecase,handlerにinterface抽象化をしない
-→handlerが2階層下のdomainに依存したりします
-→DIもしない
-
 ### フォルダ構成
 
 ```
@@ -17,7 +13,7 @@
     ∟rest
       ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ)
 - usecase
-    ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ) ここでdb接続&閉じる
+    ∟[各種domain].go → 全てのCRUD関数記載(interface,structは一つ)
 - domain
     ∟model
       ∟[各種domain].go

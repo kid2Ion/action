@@ -8,11 +8,13 @@ import (
 )
 
 type userPersistence struct {
-	Conn *gorm.DB
+	conn *gorm.DB
 }
 
 func NewUserPersistence(conn *gorm.DB) repository.UserRepository {
-	return &userPersistence{Conn: conn}
+	return &userPersistence{
+		conn: conn,
+	}
 }
 
 func (up userPersistence) Insert(name string, gender int) error {

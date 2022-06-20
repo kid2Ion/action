@@ -1,16 +1,32 @@
 package main
 
 import (
-	rest "action/handler/rest"
+	db "action/config"
+	"action/domain/model"
+	handler "action/handler"
+	"action/infra/persistence"
+	"action/usecase"
 
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	e := echo.New()
 
-	e.GET("/", rest.Index)
-	e.GET("/action", rest.Action)
-	e.POST("/users", rest.Users)
+	conn, err := db.ConnectDB()
+	if err != nil {
+		panic("failes to connect db")
+	}
+	defer conn.Close()
+
+	conn.AutoMigrate(&model.User{})
+
+	e := echo.New()
+	// 依存関係の注入(全層のインスタンス化を行う)
+	userPersistence := persistence.NewUserPersistence(conn)
+	userUseCase := usecase.NewUserUseCase(userPersistence)
+	userHandler := handler.NewUserHandler(userUseCase)
+
+	e.GET("/action", userHandler.Action)
+	e.POST("/users", userHandler.UserCreate)
 	e.Logger.Fatal(e.Start(":8080"))
 }
