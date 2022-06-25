@@ -1,10 +1,16 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
 
-type User struct {
-	gorm.Model
-	Name   string
-	Gender int
-	RoomId int
+	_ "github.com/go-playground/validator/v10"
+)
+
+type Users struct {
+	Id        int    `json:"id"`
+	Name      string `json:"name" validate:"required,gte=1,lte=10,alphanum"`
+	Gender    int    `json:"gender" validate:"required,gte=0,lte=1"`
+	RoomId    string `json:"room_id" validate:"required"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
