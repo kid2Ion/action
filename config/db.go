@@ -1,11 +1,32 @@
 package db
 
-import "github.com/jinzhu/gorm"
+import (
+	"database/sql"
+	"fmt"
+	"log"
 
-func ConnectDB() (*gorm.DB, error) {
-	db, err := gorm.Open("sqlite3", "test.db")
+	_ "github.com/mattn/go-sqlite3"
+)
+
+func ConnectDB() (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", "config/example.db")
 	if err != nil {
 		return nil, err
+	}
+
+	tableName := "users"
+	cmd := fmt.Sprintf(`
+		CREATE TABLE IF NOT EXISTS %s (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			name TEXT NOT NULL,
+			gender INTEGER NOT NULL,
+			room_id INTEGER,
+			created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')),
+			updated_at TIMESTAMP DEFAULT (DATETIME('now','localtime'))
+			)`, tableName)
+	_, err = db.Exec(cmd)
+	if err != nil {
+		log.Fatal(err)
 	}
 	return db, nil
 }
