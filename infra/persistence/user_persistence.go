@@ -24,6 +24,7 @@ func (up userPersistence) Insert(u *model.Users) {
 		u.Gender,
 		u.RoomId,
 	)
+	// todo roomIdの返却
 	if err != nil {
 		log.Fatal("faled to insert users")
 	}

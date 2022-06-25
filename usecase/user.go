@@ -3,6 +3,7 @@ package usecase
 import (
 	"action/domain/model"
 	"action/domain/repository"
+	util "action/utility"
 	"fmt"
 	"net/http"
 
@@ -12,7 +13,7 @@ import (
 )
 
 type UserUseCase interface {
-	Insert(name string, gender int, room_id string) error
+	Insert(name string, gender int, roomId string) error
 	GenarateAction(roomId string) ([]*model.Users, error)
 }
 
@@ -26,12 +27,19 @@ func NewUserUseCase(ur repository.UserRepository) UserUseCase {
 	}
 }
 
-func (uu userUseCase) Insert(name string, gender int, room_id string) error {
+func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 
 	var u model.Users
 	u.Name = name
 	u.Gender = gender
-	u.RoomId = room_id
+	// 一人目だけランダムroom_id生成(2人目からはフロントから受け取る)
+	if roomId == "" {
+		randomRoomId, err := util.RandomString(10)
+		if err != nil {
+			return err
+		}
+		u.RoomId = randomRoomId
+	}
 
 	validate := validator.New()
 	err := validate.Struct(u)

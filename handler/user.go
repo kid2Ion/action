@@ -2,7 +2,6 @@ package handler
 
 import (
 	"action/usecase"
-	util "action/utility"
 	"net/http"
 	"strconv"
 
@@ -31,20 +30,13 @@ func (uh userHandler) UserCreate(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	room_id := c.QueryParam("room_id")
-	// 一人目だけランダムroom_id生成(2人目からはフロントから受け取る)
-	if room_id == "" {
-		room_id, err = util.RandomString(10)
-		if err != nil {
-			return err
-		}
-	}
+	roomId := c.QueryParam("room_id")
 
-	if err := uh.userUseCase.Insert(name, gender, room_id); err != nil {
+	if err := uh.userUseCase.Insert(name, gender, roomId); err != nil {
 		return err
 	}
 
-	return c.String(http.StatusOK, "create user")
+	return c.String(http.StatusOK, "success create user")
 }
 
 func (uh userHandler) Action(c echo.Context) error {
