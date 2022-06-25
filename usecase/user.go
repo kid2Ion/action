@@ -3,7 +3,6 @@ package usecase
 import (
 	"action/domain/model"
 	"action/domain/repository"
-	util "action/utility"
 	"fmt"
 	"net/http"
 
@@ -32,19 +31,12 @@ func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 	var u model.Users
 	u.Name = name
 	u.Gender = gender
-	// 一人目だけランダムroom_id生成(2人目からはフロントから受け取る)
-	if roomId == "" {
-		randomRoomId, err := util.RandomString(10)
-		if err != nil {
-			return err
-		}
-		u.RoomId = randomRoomId
-	}
+	u.RoomId = roomId
 
 	validate := validator.New()
 	err := validate.Struct(u)
 	if err != nil {
-		msg := fmt.Sprintf("validation err :%s", err)
+		msg := fmt.Sprintf("user struct validation err :%s", err)
 		return &echo.HTTPError{
 			Code:    http.StatusBadRequest,
 			Message: msg,
