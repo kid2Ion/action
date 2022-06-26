@@ -1,8 +1,9 @@
 package util
 
 import (
-	"crypto/rand"
 	"errors"
+	"math/rand"
+	"time"
 )
 
 func RandomString(n uint32) (string, error) {
@@ -19,4 +20,10 @@ func RandomString(n uint32) (string, error) {
 		result += string(letters[int(v)%len(letters)])
 	}
 	return result, nil
+}
+
+func RandomInt(n int) int {
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(n)
+	return num
 }

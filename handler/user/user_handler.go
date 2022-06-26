@@ -40,8 +40,10 @@ func (uh userHandler) CreateUser(c echo.Context) error {
 }
 
 func (uh userHandler) Action(c echo.Context) error {
-	// param取得
-	// usecaseの呼び出し
-	// 値の返却
-	return c.String(http.StatusOK, "return action")
+	roomId := c.QueryParam("room_id")
+	action, err := uh.userUseCase.GenarateAction(roomId)
+	if err != nil {
+		return err
+	}
+	return c.String(http.StatusOK, action)
 }
