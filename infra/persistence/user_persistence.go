@@ -46,8 +46,3 @@ func (up userPersistence) GetAllUsersByRoomId(r string) []*model.Users {
 	}
 	return users
 }
-
-type user struct {
-	name string
-	age  int
-}
