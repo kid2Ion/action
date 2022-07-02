@@ -2,7 +2,8 @@ package main
 
 import (
 	db "action/config"
-	handler "action/handler"
+	room_handler "action/handler/room"
+	user_handler "action/handler/user"
 	"action/infra/persistence"
 	"action/usecase"
 
@@ -21,9 +22,10 @@ func main() {
 	// 依存関係の注入(全層のインスタンス化を行う)
 	userPersistence := persistence.NewUserPersistence(conn)
 	userUseCase := usecase.NewUserUseCase(userPersistence)
-	userHandler := handler.NewUserHandler(userUseCase)
+	userHandler := user_handler.NewUserHandler(userUseCase)
 
 	e.GET("/action", userHandler.Action)
-	e.POST("/users", userHandler.UserCreate)
+	e.GET("/room", room_handler.GetRoomId)
+	e.POST("/users", userHandler.CreateUser)
 	e.Logger.Fatal(e.Start(":8080"))
 }

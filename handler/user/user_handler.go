@@ -1,4 +1,4 @@
-package handler
+package user_handler
 
 import (
 	"action/usecase"
@@ -9,7 +9,7 @@ import (
 )
 
 type UserHandler interface {
-	UserCreate(c echo.Context) error
+	CreateUser(c echo.Context) error
 	Action(c echo.Context) error
 }
 
@@ -23,7 +23,7 @@ func NewUserHandler(uu usecase.UserUseCase) UserHandler {
 	}
 }
 
-func (uh userHandler) UserCreate(c echo.Context) error {
+func (uh userHandler) CreateUser(c echo.Context) error {
 
 	name := c.QueryParam("name")
 	gender, err := strconv.Atoi(c.QueryParam("gender"))
