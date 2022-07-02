@@ -3,6 +3,7 @@ package usecase
 import (
 	"action/domain/model"
 	"action/domain/repository"
+	util "action/utility"
 	"fmt"
 	"net/http"
 
@@ -13,7 +14,7 @@ import (
 
 type UserUseCase interface {
 	Insert(name string, gender int, roomId string) error
-	GenarateAction(roomId string) ([]*model.Users, error)
+	GenerateAction(roomId string) (string, error)
 }
 
 type userUseCase struct {
@@ -26,12 +27,14 @@ func NewUserUseCase(ur repository.UserRepository) UserUseCase {
 	}
 }
 
+type userGroup struct {
+	*model.Users
+	UserGroup int
+}
+
 func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 
-	var u model.Users
-	u.Name = name
-	u.Gender = gender
-	u.RoomId = roomId
+	u := model.NewUser(name, gender, roomId)
 
 	validate := validator.New()
 	err := validate.Struct(u)
@@ -42,13 +45,32 @@ func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 			Message: msg,
 		}
 	}
-	uu.userRepository.Insert(&u)
+	uu.userRepository.Insert(u)
 	return nil
 }
 
-func (uu userUseCase) GenarateAction(roomId string) ([]*model.Users, error) {
-	// action生成ロジック
-	// vlidation
-	// domainの呼び出し
-	return nil, nil
+func (uu userUseCase) GenerateAction(roomId string) (string, error) {
+	users := uu.userRepository.GetAllUsersByRoomId(roomId)
+	action := getActionContent(users)
+
+	return action, nil
+}
+
+func getActionContent(users []*model.Users) string {
+	var grouA []*userGroup
+	var grouB []*userGroup
+
+	// 埋め込み構造体の練習
+	for _, v := range users {
+		u := &userGroup{UserGroup: v.Gender, Users: v}
+		if u.UserGroup == 1 {
+			grouA = append(grouA, u)
+		} else {
+			grouB = append(grouB, u)
+		}
+	}
+
+	actionContent := fmt.Sprintf("%s と %s が ~~~", grouA[util.RandomInt(len(grouA))].Name, grouB[util.RandomInt(len(grouB))].Name)
+	// todo contentの内容の出しわけ
+	return actionContent
 }

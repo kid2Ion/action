@@ -24,7 +24,7 @@ func main() {
 	userUseCase := usecase.NewUserUseCase(userPersistence)
 	userHandler := user_handler.NewUserHandler(userUseCase)
 
-	e.GET("/action", userHandler.Action)
+	e.GET("/action", userHandler.GetAction)
 	e.GET("/room", room_handler.GetRoomId)
 	e.POST("/users", userHandler.CreateUser)
 	e.Logger.Fatal(e.Start(":8080"))

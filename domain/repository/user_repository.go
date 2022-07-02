@@ -5,6 +5,6 @@ import (
 )
 
 type UserRepository interface {
-	GetAllUsersByRoomId(roomId string) ([]*model.Users, error)
+	GetAllUsersByRoomId(string) []*model.Users
 	Insert(*model.Users)
 }

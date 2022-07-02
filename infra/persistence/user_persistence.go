@@ -30,7 +30,19 @@ func (up userPersistence) Insert(u *model.Users) {
 	}
 }
 
-func (up userPersistence) GetAllUsersByRoomId(roomId string) ([]*model.Users, error) {
-	// 中身まだ
-	return nil, nil
+func (up userPersistence) GetAllUsersByRoomId(r string) []*model.Users {
+	rows, err := up.conn.Query("SELECT * FROM users WHERE room_id = ?", r)
+	if err != nil {
+		log.Fatal("faled to get users")
+	}
+	users := []*model.Users{}
+
+	for rows.Next() {
+		user := &model.Users{}
+		if err := rows.Scan(&user.Id, &user.Name, &user.Gender, &user.RoomId, &user.CreatedAt, &user.UpdatedAt); err != nil {
+			log.Fatal("getRows rows.Scan error err:%v", err)
+		}
+		users = append(users, user)
+	}
+	return users
 }

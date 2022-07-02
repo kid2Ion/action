@@ -10,7 +10,7 @@ import (
 
 type UserHandler interface {
 	CreateUser(c echo.Context) error
-	Action(c echo.Context) error
+	GetAction(c echo.Context) error
 }
 
 type userHandler struct {
@@ -39,9 +39,11 @@ func (uh userHandler) CreateUser(c echo.Context) error {
 	return c.String(http.StatusOK, "success create user")
 }
 
-func (uh userHandler) Action(c echo.Context) error {
-	// param取得
-	// usecaseの呼び出し
-	// 値の返却
-	return c.String(http.StatusOK, "return action")
+func (uh userHandler) GetAction(c echo.Context) error {
+	roomId := c.QueryParam("room_id")
+	action, err := uh.userUseCase.GenerateAction(roomId)
+	if err != nil {
+		return err
+	}
+	return c.String(http.StatusOK, action)
 }
