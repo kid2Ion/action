@@ -14,7 +14,7 @@ import (
 
 type UserUseCase interface {
 	Insert(name string, gender int, roomId string) error
-	GenarateAction(roomId string) (string, error)
+	GenerateAction(roomId string) (string, error)
 }
 
 type userUseCase struct {
@@ -34,7 +34,7 @@ type userGroup struct {
 
 func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 
-	u := model.NewUsers(name, gender, roomId)
+	u := model.NewUser(name, gender, roomId)
 
 	validate := validator.New()
 	err := validate.Struct(u)
@@ -49,7 +49,7 @@ func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 	return nil
 }
 
-func (uu userUseCase) GenarateAction(roomId string) (string, error) {
+func (uu userUseCase) GenerateAction(roomId string) (string, error) {
 	users := uu.userRepository.GetAllUsersByRoomId(roomId)
 	action := getActionContent(users)
 

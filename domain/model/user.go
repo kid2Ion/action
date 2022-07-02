@@ -15,7 +15,7 @@ type Users struct {
 	UpdatedAt time.Time
 }
 
-func NewUsers(name string, gender int, roomId string) *Users {
+func NewUser(name string, gender int, roomId string) *Users {
 	user := new(Users)
 	user.Name = name
 	user.Gender = gender
