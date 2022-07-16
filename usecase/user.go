@@ -4,7 +4,10 @@ import (
 	"action/domain/model"
 	"action/domain/repository"
 	util "action/utility"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/go-playground/validator"
@@ -32,6 +35,27 @@ type userGroup struct {
 	UserGroup int
 }
 
+type Talk struct {
+	ID      int    `json:"id"`
+	Content string `json:"content"`
+}
+
+type Alcohol struct {
+	ID      int    `json:"id"`
+	Content string `json:"content"`
+}
+
+type Action struct {
+	ID      int    `json:"id"`
+	Content string `json:"content"`
+}
+
+type ActionContent struct {
+	Talk    []Talk    `json:"talk"`
+	Alcohol []Alcohol `json:"alcohol"`
+	Action  []Action  `json:"action"`
+}
+
 func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 
 	u := model.NewUser(name, gender, roomId)
@@ -51,12 +75,43 @@ func (uu userUseCase) Insert(name string, gender int, roomId string) error {
 
 func (uu userUseCase) GenerateAction(roomId string) (string, error) {
 	users := uu.userRepository.GetAllUsersByRoomId(roomId)
-	action := getActionContent(users)
+	actionContent, err := getActionContentFromJsonFile()
+	if err != nil {
+		return "", err
+	}
 
+	var ac string
+	var action string
+	// actionのランダムなパターン
+	n := util.RandomInt(3)
+	switch n {
+	case 0:
+		ac = actionContent.Talk[util.RandomInt(len(actionContent.Talk))].Content
+		action = getUserFromUsers(users) + ac
+	case 1:
+		ac = actionContent.Alcohol[util.RandomInt(len(actionContent.Alcohol))].Content
+		action = getUserFromUsers(users) + ac
+	case 2:
+		ac = actionContent.Action[util.RandomInt(len(actionContent.Action))].Content
+		action = getTwoUsersFromUsers(users) + ac
+	}
 	return action, nil
 }
 
-func getActionContent(users []*model.Users) string {
+func getActionContentFromJsonFile() (ActionContent, error) {
+	jsonFromFile, err := ioutil.ReadFile("./actionContent.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var actionContent ActionContent
+	err = json.Unmarshal(jsonFromFile, &actionContent)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return actionContent, nil
+}
+
+func getTwoUsersFromUsers(users []*model.Users) string {
 	var grouA []*userGroup
 	var grouB []*userGroup
 
@@ -70,7 +125,11 @@ func getActionContent(users []*model.Users) string {
 		}
 	}
 
-	actionContent := fmt.Sprintf("%s と %s が ~~~", grouA[util.RandomInt(len(grouA))].Name, grouB[util.RandomInt(len(grouB))].Name)
-	// todo contentの内容の出しわけ
-	return actionContent
+	twoUsers := fmt.Sprintf("%s と %s が", grouA[util.RandomInt(len(grouA))].Name, grouB[util.RandomInt(len(grouB))].Name)
+	return twoUsers
+}
+
+func getUserFromUsers(users []*model.Users) string {
+	user := fmt.Sprintf("%s が", *&users[util.RandomInt(len(users))].Name)
+	return user
 }
